@@ -11,7 +11,8 @@ const CreateUser = (request, reply) => {
     user.save((err) => {
         if (err) {
             reply({
-                "err": err
+                success: false,
+                message: err
             })
         } else {
             reply(user);
@@ -20,43 +21,74 @@ const CreateUser = (request, reply) => {
 };
 
 const UpdateUser = (request, reply) => {
-    User.findByIdAndUpdate(request.query.id, request.payload, {
-        new: true
-    }, (err, user) => {
-        if (err) {
-            reply({
-                err: err
+    if (!request.query && !request.query.token) {
+        reply(config.Authentication_messages.token_required)
+    } else {
+        Authenticate.validateToken(request.query.token).then((response) => {
+            User.findByIdAndUpdate(request.query.id, request.payload, {
+                new: true
+            }, (err, user) => {
+                if (err) {
+                    reply({
+                        success: false,
+                        message: err
+                    });
+                } else {
+                    reply(user);
+                }
             });
-        } else {
-            reply(user);
-        }
-    });
+        }).catch((error) => {
+            reply(error);
+        })
+    }
 };
 
 const DeleteUser = (request, reply) => {
-    User.remove(request.payload, (err, data) => {
-        if (err) {
-            reply({
-                err: err
+    if (!request.query && !request.query.token) {
+        reply(config.Authentication_messages.token_required)
+    } else {
+        Authenticate.validateToken(request.query.token).then((response) => {
+            User.remove(request.payload, (err, data) => {
+                if (err) {
+                    reply({
+                        success: false,
+                        message: err.message
+                    });
+                } else {
+                    reply({
+                        success: true,
+                        message: "User profile deleted"
+                    });
+                }
             });
-        } else {
-            reply({
-                message: "success"
-            });
-        }
-    });
+        }).catch((error) => {
+            reply(error);
+        })
+    }
 };
 
 const GetAllUsers = (request, reply) => {
-    User.find((err, users) => {
-        if (err) {
-            reply({
-                'err': err
+    if (!request.query && !request.query.token) {
+        reply(config.Authentication_messages.token_required)
+    } else {
+        Authenticate.validateToken(request.query.token).then((response) => {
+            User.find({}, {
+                password: 0,
+                __v: 0
+            }, (err, users) => {
+                if (err) {
+                    reply({
+                        success: false,
+                        message: err
+                    });
+                } else {
+                    reply(users);
+                }
             });
-        } else {
-            reply(users);
-        }
-    });
+        }).catch((error) => {
+            reply(error);
+        })
+    }
 };
 
 const GetOneUser = (request, reply) => {
@@ -64,18 +96,29 @@ const GetOneUser = (request, reply) => {
 };
 
 const GetByIdUser = (request, reply) => {
-    let id = request.query.id;
-    User.findOne({
-        _id: id
-    }, (err, user) => {
-        if (err) {
-            reply({
-                err: err
+    if (!request.query && !request.query.token) {
+        reply(config.Authentication_messages.token_required)
+    } else {
+        Authenticate.validateToken(request.query.token).then((response) => {
+            let id = request.query.id;
+            User.findOne({
+                _id: id
+            }, {
+                __v: 0
+            }, (err, user) => {
+                if (err) {
+                    reply({
+                        success: false,
+                        message: err
+                    });
+                } else {
+                    reply(user);
+                }
             });
-        } else {
-            reply(user);
-        }
-    });
+        }).catch((error) => {
+            reply(error);
+        });
+    }
 };
 
 const AuthenticateUser = (request, reply) => {

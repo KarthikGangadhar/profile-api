@@ -5,51 +5,45 @@ const util = require('util');
 
 const GenerateToken = (request) => {
     return new Promise((resolve, reject) => {
-        User.findOne({
-            name: request.name
-        }, function (err, user) {
+        if (!request || !request.name) {
+            return reject(config.Authentication_messages.invalid_username);
+        } else {
+            User.findOne({
+                name: request.name
+            }, function (err, user) {
 
-            if (err) {
-                return reject({
-                    success: false,
-                    message: 'Authentication failed. User not found.'
-                });
-            };
-            if (!user) {
-                reject({
-                    success: false,
-                    message: 'Authentication failed. User not found.'
-                });
-            } else if (user) {
+                if (err) {
+                    return reject(config.Authentication_messages.authentication_error);
+                };
+                if (!user) {
+                    return reject(config.Authentication_messages.authentication_error);
+                } else if (user) {
 
-                // check if password matches
-                if (user.password != request.password) {
-                    reject({
-                        success: false,
-                        message: 'Authentication failed. Wrong password.'
-                    });
-                } else {
+                    // check if password matches
+                    if (user.password != request.password) {
+                        return reject(config.Authentication_messages.invalid_password);
+                    } else {
 
-                    // if user is found and password is right
-                    // create a token with only our given payload
-                    // we don't want to pass in the entire user since that has the password
-                    const payload = {
-                        admin: user.admin,
-                        expiresInMinutes: 1440
-                    };
-                    var token = jwt.sign(payload, config.secret, {});
+                        // if user is found and password is right
+                        // create a token with only our given payload
+                        // we don't want to pass in the entire user since that has the password
+                        const payload = {
+                            admin: user.admin,
+                            expiresInMinutes: 1440
+                        };
+                        var token = jwt.sign(payload, config.secret, {});
 
-                    // return the information including token as JSON
-                    resolve({
-                        success: true,
-                        message: 'your token will expire in 24 hours',
-                        token: token
-                    });
+                        // return the information including token as JSON
+                        resolve({
+                            success: true,
+                            token: token
+                        });
+                    }
+
                 }
 
-            }
-
-        });
+            });
+        }
     })
 
 }

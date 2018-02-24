@@ -1,8 +1,6 @@
 'use strict';
-
 const Joi = require('joi');
 const Handlers = require('../lib/handlers.js');
-
 
 const resultHTTPStatus = {
     '200': {
@@ -30,6 +28,11 @@ module.exports = [{
             plugins: {
                 'hapi-swagger': {
                     responses: resultHTTPStatus
+                }
+            },
+            validate: {
+                query: {
+                    token: Joi.string().required()
                 }
             }
         }
@@ -71,7 +74,8 @@ module.exports = [{
             },
             validate: {
                 query: {
-                    id: Joi.string().required().description('Id: User Id')
+                    id: Joi.string().required().description('Id: User Id'),
+                    token: Joi.string().required()
                 }
             }
         }
@@ -96,7 +100,8 @@ module.exports = [{
                     admin: Joi.boolean()
                 },
                 query: {
-                    id: Joi.string().required().description('Id: User Id')
+                    id: Joi.string().required().description('Id: User Id'),
+                    token: Joi.string().required()
                 }
             }
         }
@@ -116,16 +121,18 @@ module.exports = [{
             },
             validate: {
                 payload: {
-                    _id: Joi.string().required(),
                     name: Joi.string().required(),
                     password: Joi.string()
+                },
+                query: {
+                    token: Joi.string().required()
                 }
             }
         }
     },
     {
         method: 'POST',
-        path: '/api/authenticate',
+        path: '/api/get_token',
         config: {
             handler: Handlers.authenticateUser,
             description: 'Authenticate Users',
@@ -146,7 +153,7 @@ module.exports = [{
     },
     {
         method: 'POST',
-        path: '/api/validateToken',
+        path: '/api/validate_token',
         config: {
             handler: Handlers.verifyUserToken,
             description: 'Validate Users',
