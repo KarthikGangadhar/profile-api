@@ -13,7 +13,10 @@
   },
   "keywords": [
     "jwt-token",
-    "express"
+    "hapi",
+    "rest",
+    "mango",
+    "swagger"
   ],
   "author": "kgangadhar",
   "license": "ISC",
@@ -31,5 +34,9 @@
     "mongoose": "^5.0.6",
     "morgan": "^1.9.0",
     "vision": "^4.1.x"
+  },
+  "engines": {
+    "node": "8.9.4",
+    "npm": "5.4.2"
   }
 }
