@@ -1,7 +1,7 @@
 {
   "name": "profile-api",
   "version": "1.0.0",
-  "description": "This is a express web api built with json web token authenticaction",
+  "description": "This is a REST API create using hapi and mangoose to maintains developers profiles",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

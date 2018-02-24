@@ -18,24 +18,30 @@ const CreateUser = (request, reply) => {
     });
 };
 
-const UpdateUser = (request, reply, next) => {
-    User.findByIdAndUpdate(request.body._id, request.body, {
+const UpdateUser = (request, reply) => {
+    User.findByIdAndUpdate(request.query.id, request.payload, {
         new: true
     }, (err, user) => {
         if (err) {
-            next(err);
+            reply({
+                err: err
+            });
         } else {
             reply(user);
         }
     });
 };
 
-const DeleteUser = (request, reply, next) => {
-    request.user.remove((err) => {
+const DeleteUser = (request, reply) => {
+    User.remove(request.payload, (err, data) => {
         if (err) {
-            next(err);
+            reply({
+                err: err
+            });
         } else {
-            reply(request.user);
+            reply({
+                message: "success"
+            });
         }
     });
 };
@@ -56,15 +62,17 @@ const GetOneUser = (request, reply) => {
     reply(request.user);
 };
 
-const GetByIdUser = (request, reply, next, id) => {
+const GetByIdUser = (request, reply) => {
+    let id = request.query.id;
     User.findOne({
         _id: id
     }, (err, user) => {
         if (err) {
-            next(err);
+            reply({
+                err: err
+            });
         } else {
-            request.user = user;
-            next();
+            reply(user);
         }
     });
 };

@@ -5,7 +5,6 @@ const Vision = require('vision');
 const Pack = require('./package');
 const Routes = require('./app/helpers/routes');
 
-
 const  server = new Hapi.Server();
 server.connection({
     host: (process.env.HOST || 'localhost'),
@@ -14,13 +13,12 @@ server.connection({
 });
 
 
-
 // setup swagger options
 const swaggerOptions = {
     info: {
         version: Pack.version,
         title: 'Profile API Documentation',
-        description: 'This web API was built to demonstrate some of the hapi features and functionality.'
+        description: 'This is a REST API create using hapi and mangoose to maintains developers profiles.'
     },
     tags: [{
         'name': 'index',

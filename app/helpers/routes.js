@@ -19,21 +19,6 @@ const resultHTTPStatus = {
     }
 };
 
-// router.route('/users')
-//   .post(createUser)
-//   .get(getAllUsers);
-
-// router.route('/users/:userId')
-//   .get(getOneUser)
-//   .put(updateUser)
-//   .delete(deleteUser);
-
-// router.param('userId', getByIdUser);
-
-// app.use('/api/v1', router);
-
-// app.listen(3000);
-// module.exports = app;
 module.exports = [{
         method: 'GET',
         path: '/users',
@@ -55,7 +40,7 @@ module.exports = [{
             handler: Handlers.createUser,
             description: 'Create New Users',
             tags: ['api', 'reduced'],
-            notes: ['Create a new users and updates data into MongoDB'],
+            notes: ['Create a new users and updates data'],
             plugins: {
                 'hapi-swagger': {
                     responses: resultHTTPStatus
@@ -66,6 +51,72 @@ module.exports = [{
                     name: Joi.string().required(),
                     password: Joi.string().required(),
                     admin: Joi.boolean().required()
+                }
+            }
+        }
+    }, {
+        method: 'GET',
+        path: '/users/{userId}',
+        config: {
+            handler: Handlers.getByIdUser,
+            description: 'Get Users By ID',
+            tags: ['api', 'reduced'],
+            notes: ['Fetches the existing users data by Id'],
+            plugins: {
+                'hapi-swagger': {
+                    responses: resultHTTPStatus
+                }
+            },
+            validate: {
+                query: {
+                    id: Joi.string().required().description('Id: User Id')
+                }
+            }
+        }
+    },
+    {
+        method: 'PUT',
+        path: '/users/{userId}',
+        config: {
+            handler: Handlers.updateUser,
+            description: 'Update existing User Data',
+            tags: ['api', 'reduced'],
+            notes: ['Update a users data by Id'],
+            plugins: {
+                'hapi-swagger': {
+                    responses: resultHTTPStatus
+                }
+            },
+            validate: {
+                payload: {
+                    name: Joi.string(),
+                    password: Joi.string(),
+                    admin: Joi.boolean()
+                },
+                query: {
+                    id: Joi.string().required().description('Id: User Id')
+                }
+            }
+        }
+    },
+    {
+        method: 'DELETE',
+        path: '/users/{userId}',
+        config: {
+            handler: Handlers.deleteUser,
+            description: 'Update existing User Data',
+            tags: ['api', 'reduced'],
+            notes: ['Update a users data by Id'],
+            plugins: {
+                'hapi-swagger': {
+                    responses: resultHTTPStatus
+                }
+            },
+            validate: {
+                payload: {
+                    _id: Joi.string().required(),
+                    name: Joi.string().required(),
+                    password: Joi.string()
                 }
             }
         }
