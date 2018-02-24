@@ -33,7 +33,8 @@ module.exports = [{
                 }
             }
         }
-    }, {
+    },
+    {
         method: 'POST',
         path: '/users',
         config: {
@@ -54,7 +55,8 @@ module.exports = [{
                 }
             }
         }
-    }, {
+    },
+    {
         method: 'GET',
         path: '/users/{userId}',
         config: {
@@ -104,7 +106,7 @@ module.exports = [{
         path: '/users/{userId}',
         config: {
             handler: Handlers.deleteUser,
-            description: 'Update existing User Data',
+            description: 'Delete a User Data',
             tags: ['api', 'reduced'],
             notes: ['Update a users data by Id'],
             plugins: {

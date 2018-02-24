@@ -5,11 +5,13 @@ const Vision = require('vision');
 const Pack = require('./package');
 const Routes = require('./app/helpers/routes');
 
-const  server = new Hapi.Server();
+const server = new Hapi.Server();
 server.connection({
     host: (process.env.HOST || 'localhost'),
     port: (process.env.PORT || 8080),
-    routes: { cors: true }
+    routes: {
+        cors: true
+    }
 });
 
 
@@ -18,7 +20,7 @@ const swaggerOptions = {
     info: {
         version: Pack.version,
         title: 'Profile API Documentation',
-        description: 'This is a REST API create using hapi and mangoose to maintains developers profiles.'
+        description: 'This is a REST API for developers profiles.'
     },
     tags: [{
         'name': 'index',
@@ -32,7 +34,7 @@ const swaggerOptions = {
         'description': 'storing your sums for later use',
         'externalDocs': {
             'description': 'Find out more',
-            'url': 'http://example.org'
+            'url': 'localhost:8080/'
         }
     }]
 };
@@ -45,11 +47,11 @@ server.register([
         register: require('hapi-swagger'),
         options: swaggerOptions
     }
-    ], function (err) {
-        server.start(function(){
-            console.log('Server running at:', server.info.uri);
-        });
+], (err) => {
+    server.start(() => {
+        console.log('Server running at:', server.info.uri);
     });
+});
 
 
 // add routes
