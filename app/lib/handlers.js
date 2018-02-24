@@ -55,10 +55,12 @@ const DeleteUser = (request, reply) => {
                         message: err.message
                     });
                 } else {
-                    reply({
-                        success: true,
-                        message: "User profile deleted"
-                    });
+                    if (data && !!data.n) {
+                        reply(config.Authentication_messages.delete_success);
+                    } else {
+                        reply(config.Authentication_messages.profile_not_exist);
+                    }
+
                 }
             });
         }).catch((error) => {

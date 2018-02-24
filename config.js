@@ -18,6 +18,18 @@ module.exports = {
         authentication_error: {
             success: false,
             message: 'Authentication failed. User not found.'
+        },
+        token_auth_failure: {
+            success: false,
+            message: 'Failed to authenticate token.'
+        },
+        delete_success: {
+            success: true,
+            message: "User profile deleted"
+        },
+        profile_not_exist: {
+            success: false,
+            message: "Profile Already deleted"
         }
     },
 };

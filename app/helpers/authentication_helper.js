@@ -53,10 +53,7 @@ const ValidateToken = (token) => {
         // verifies secret and checks exp
         jwt.verify(token, config.secret, function (err, decoded) {
             if (err) {
-                return reject({
-                    success: false,
-                    message: 'Failed to authenticate token.'
-                });
+                return reject(config.Authentication_messages.token_auth_failure);
             } else {
                 // if everything is good, save to request for use in other routes
                 let message = util.format(config.token_message, decoded.expiresInMinutes)
