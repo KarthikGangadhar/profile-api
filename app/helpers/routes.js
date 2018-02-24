@@ -21,7 +21,7 @@ const resultHTTPStatus = {
 
 module.exports = [{
         method: 'GET',
-        path: '/users',
+        path: '/api/users',
         config: {
             handler: Handlers.getAllUsers,
             description: 'Get All Users',
@@ -36,7 +36,7 @@ module.exports = [{
     },
     {
         method: 'POST',
-        path: '/users',
+        path: '/api/users',
         config: {
             handler: Handlers.createUser,
             description: 'Create New Users',
@@ -58,7 +58,7 @@ module.exports = [{
     },
     {
         method: 'GET',
-        path: '/users/{userId}',
+        path: '/api/users/{userId}',
         config: {
             handler: Handlers.getByIdUser,
             description: 'Get Users By ID',
@@ -78,7 +78,7 @@ module.exports = [{
     },
     {
         method: 'PUT',
-        path: '/users/{userId}',
+        path: '/api/users/{userId}',
         config: {
             handler: Handlers.updateUser,
             description: 'Update existing User Data',
@@ -103,7 +103,7 @@ module.exports = [{
     },
     {
         method: 'DELETE',
-        path: '/users/{userId}',
+        path: '/api/users/{userId}',
         config: {
             handler: Handlers.deleteUser,
             description: 'Delete a User Data',
@@ -119,6 +119,47 @@ module.exports = [{
                     _id: Joi.string().required(),
                     name: Joi.string().required(),
                     password: Joi.string()
+                }
+            }
+        }
+    },
+    {
+        method: 'POST',
+        path: '/api/authenticate',
+        config: {
+            handler: Handlers.authenticateUser,
+            description: 'Authenticate Users',
+            tags: ['api', 'reduced'],
+            notes: ['Create a new users and updates data'],
+            plugins: {
+                'hapi-swagger': {
+                    responses: resultHTTPStatus
+                }
+            },
+            validate: {
+                payload: {
+                    name: Joi.string().required(),
+                    password: Joi.string().required(),
+                }
+            }
+        }
+    },
+    {
+        method: 'POST',
+        path: '/api/validateToken',
+        config: {
+            handler: Handlers.verifyUserToken,
+            description: 'Validate Users',
+            tags: ['api', 'reduced'],
+            notes: ['verify user token'],
+            plugins: {
+                'hapi-swagger': {
+                    responses: resultHTTPStatus
+                }
+            },
+            validate: {
+                query: {
+                    token: Joi.string().required()
                 }
             }
         }
