@@ -23,7 +23,6 @@
   "homepage": "https://github.com/KarthikGangadhar/profile-api#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "good": "^8.1.0",
     "hapi": "^13.0.0",
     "hapi-swagger": "^6.0.0",
     "inert": "^4.1.x",
